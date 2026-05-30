@@ -9,6 +9,7 @@ import type {
   NavItem,
   ProcessStep,
 } from "@/types/courthouse";
+import { IT_URL } from "@/lib/domains";
 
 export const navItems: NavItem[] = [
   { label: "How It Works", href: "#how-it-works" },
@@ -385,6 +386,7 @@ export const complianceItems: string[] = [
 export const footerBrand = {
   description:
     "Courthouse is a structured legal intake and attorney matching system. It does not provide legal advice and does not create attorney-client relationships.",
+  itLink: IT_URL,
 };
 
 export const footerColumns: FooterColumn[] = [

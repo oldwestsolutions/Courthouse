@@ -1,58 +1,64 @@
 # courthouse.legal
 
-The public homepage for **Courthouse** — a structured legal intake and attorney attention-allocation marketplace. Clients submit legal issues through a guided intake flow that turns vague legal anxiety into classified, jurisdiction-tagged, urgency-scored case intelligence; verified attorneys subscribe to a feed of pre-structured case opportunities.
+The public homepage for **Courthouse** — a structured legal intake and attorney attention-allocation marketplace. Clients submit legal issues through a guided intake flow; verified attorneys subscribe to a feed of pre-structured case opportunities.
 
-The design language blends the gravity of a federal courthouse, the institutional restraint of private-bank software, the spacing and micro-interaction quality of Stripe, and the terminal intelligence of a Bloomberg data feed.
+This repository serves **two domains** from a single Next.js deployment:
+
+| Domain | Purpose |
+|---|---|
+| [courthouse.legal](https://courthouse.legal) | Public legal intake marketplace |
+| [courthouse.it.com](https://courthouse.it.com) | Internal IT service desk & support portal |
 
 ## Stack
 
 - **Next.js 14** (App Router) + **TypeScript**
-- **Tailwind CSS** for styling, with the full design system defined as CSS custom properties in `app/globals.css`
-- **Framer Motion** for all animation and scroll reveals
-- **next/font** loading **Playfair Display** (headings) and **DM Sans** (body/UI)
+- **Tailwind CSS** — design system via CSS custom properties in `app/globals.css`
+- **Framer Motion** — animations and scroll reveals
+- **@vercel/analytics** — page analytics on Vercel
+- **Playfair Display** + **DM Sans** via `next/font`
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev
 ```
 
-Other scripts:
+- **Legal site:** [http://localhost:3000](http://localhost:3000)
+- **IT portal (local):** [http://localhost:3000/it](http://localhost:3000/it)
 
-```bash
-npm run build    # production build
-npm run start    # serve the production build
-npm run lint     # next lint
-```
+In production, `middleware.ts` routes each domain automatically — `courthouse.it.com` serves the IT portal at `/`, and visiting `/it` on `courthouse.legal` redirects to the IT domain.
 
 ## Project structure
 
 ```
 app/
-  layout.tsx                # fonts, metadata, viewport, globals import
-  page.tsx                  # composes all sections in order
-  globals.css               # design tokens, noise texture, base typography
-components/courthouse/
-  Navigation.tsx            # fixed nav + mobile drawer
-  Hero.tsx                  # split hero + live intake form card
-  IntakeProcessingOverlay.tsx  # terminal-style "analyze my case" sequence
-  HowItWorks.tsx            # three-stage protocol
-  WhyCourthouse.tsx         # 2x2 advantage grid
-  CaseFeed.tsx              # Bloomberg-style live case intelligence feed
-  ForAttorneys.tsx          # enterprise SaaS pitch + feature list
-  ComplianceStrip.tsx       # institutional disclaimer strip
-  Footer.tsx                # four-column footer
+  layout.tsx              # Root layout — fonts, analytics, legal metadata
+  page.tsx                # courthouse.legal homepage
+  it/
+    layout.tsx            # courthouse.it.com metadata
+    page.tsx              # IT support portal homepage
+middleware.ts             # Host-based domain routing
+components/
+  courthouse/             # Legal site sections
+  courthouse-it/          # IT portal sections
 lib/
-  animations.ts             # shared Framer Motion variants
-  courthouse-data.ts        # all copy, mock cases, attorneys, stats
+  domains.ts              # Domain constants & host detection
+  courthouse-data.ts      # Legal copy & mock data
+  courthouse-it-data.ts   # IT copy & mock data
+  animations.ts           # Shared Framer Motion variants
 types/
-  courthouse.ts             # Case, Attorney, UrgencyLevel, PracticeArea, etc.
+  courthouse.ts           # Legal TypeScript interfaces
+  courthouse-it.ts        # IT TypeScript interfaces
 ```
 
-## Design system
+## Vercel deployment
 
-All colors are referenced exclusively through CSS variables on `:root` (navy scale, gold accents, ivory paper background, urgency colors). A near-imperceptible SVG noise texture is layered on every section via the `.ch-section` utility to give the page the weight of institutional paper.
+1. Connect this repo to a Vercel project.
+2. Add both domains in **Project Settings → Domains:**
+   - `courthouse.legal`
+   - `courthouse.it.com`
+3. Deploy — middleware handles routing with no extra configuration.
 
 ## Disclaimer
 
